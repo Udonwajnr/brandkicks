@@ -102,7 +102,7 @@ export default function ProductDetailPage({ params }) {
   const addToWishlist = () => {
     showAlert("success", "Added to Wishlist", `${product.name} has been added to your wishlist`)
   }
-
+  
   if (isLoading) return null
   if (error) return <div className="text-center py-12">{error}</div>
   if (!product) return null

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Alert } from "@/components/ui/alert"
-
+import { useAuth } from "../context/context"
 // Price range options
 const priceRanges = [
   { label: "$100 - $250", value: "100-250" },
@@ -39,6 +39,7 @@ export default function Catalog() {
   const [filteredProducts, setFilteredProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const {addToCart } = useAuth()
 
   // State for brands (dynamically loaded from products)
   const [availableBrands, setAvailableBrands] = useState([])
@@ -230,12 +231,11 @@ export default function Catalog() {
   const toggleMobileFilters = () => {
     setShowMobileFilters((prev) => !prev)
   }
-
-  const addToCart = (product) => {
-    // This would normally add the product to the cart
-    // For now, just show an alert
-    showAlert("success", "Added to Cart", `${product.name} has been added to your cart.`)
-  }
+//   const addToCart = (product) => {
+//     // This would normally add the product to the cart
+//     // For now, just show an alert
+//     showAlert("success", "Added to Cart", `${product.name} has been added to your cart.`)
+//   }
 
   const addToWishlist = (product) => {
     // This would normally add the product to the wishlist

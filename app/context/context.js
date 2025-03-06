@@ -20,8 +20,6 @@ export function AuthProvider({ children }) {
   const router = useRouter();
   const [cart, setCart] = useState([])
   const [isCartOpen, setIsCartOpen] = useState(false)
-
-
   // Create Axios Instance (Without Authorization Header)
   const api = axios.create({
     baseURL: BASE_URL,
@@ -67,6 +65,7 @@ export function AuthProvider({ children }) {
       }
       try {
         const response = await api.get("/api/user/profile");
+        console.log(response)
         setUser(response.data);
       } catch (error) {
         console.error("Auth check error:", error);
@@ -87,21 +86,20 @@ export function AuthProvider({ children }) {
   },[])
 
   useEffect(() => {
-    const savedCart = localStorage.getItem("cart")
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart))
-      } catch (error) {
-        console.error("Failed to parse cart from localStorage:", error)
-        setCart([])
-      }
+    if(typeof window !== "undefined"){
+        const savedCart = localStorage.getItem("cart")
+        if (savedCart) {
+            setCart(JSON.parse(savedCart))
+        }
     }
   }, [])
 
-
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart))
+    if(typeof window !=="undefined" && cart.length > 0){
+        localStorage.setItem("cart", JSON.stringify(cart))
+    }
   }, [cart])
+
   // Login Function
   const login = async (email, password) => {
     setIsLoading(true)
@@ -116,7 +114,6 @@ export function AuthProvider({ children }) {
 
       // Save token
       localStorage.setItem("token", token)
-
       setUser(user)
       return user
     } finally {
@@ -159,36 +156,47 @@ export function AuthProvider({ children }) {
   const toggleCart = () => setIsCartOpen((prev) => !prev)
 
   const addToCart = (product, quantity = 1, selectedSize = null, selectedColor = null) => {
-    setCart((prevCart) => {
-      // Check if the product with the same ID, size, and color already exists in the cart
-      const existingItemIndex = prevCart.findIndex(
-        (item) => item.id === product._id && item.size === selectedSize && item.color === selectedColor,
-      )
+  setCart((prevCart) => {
+    // Ensure previous cart is an array
+    if (!Array.isArray(prevCart)) return [];
 
-      if (existingItemIndex !== -1) {
-        // If it exists, update the quantity
-        const updatedCart = [...prevCart]
-        updatedCart[existingItemIndex].quantity += quantity
-        return updatedCart
-      } else {
-        // If it doesn't exist, add a new item
-        return [
-          ...prevCart,
-          {
-            id: product._id,
-            slug: product.slug,
-            name: product.name,
-            price: product.price,
-            image: product.images?.[0] || "/placeholder.svg",
-            quantity,
-            size: selectedSize,
-            color: selectedColor,
-            brand: product.brand,
-          },
-        ]
-      }
-    })
-  }
+    // Check if the product with the same ID, size, and color already exists
+    const existingItemIndex = prevCart.findIndex(
+      (item) => item.id === product._id && item.size === selectedSize && item.color === selectedColor
+    );
+
+    let updatedCart;
+    if (existingItemIndex !== -1) {
+      // Update quantity of existing item
+      updatedCart = prevCart.map((item, index) =>
+        index === existingItemIndex
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+    } else {
+      // Add new item to cart
+      updatedCart = [
+        ...prevCart,
+        {
+          id: product._id,
+          slug: product.slug,
+          name: product.name,
+          price: product.price,
+          image: product.images?.[0] || "/placeholder.svg",
+          quantity,
+          size: selectedSize,
+          color: selectedColor,
+          brand: product.brand,
+        },
+      ];
+    }
+
+    // Update localStorage immediately after updating state
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    return updatedCart;
+  });
+};
 
   const removeFromCart = (itemId, size, color) => {
     setCart((prevCart) =>
