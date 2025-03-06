@@ -67,8 +67,8 @@ export default function SiteHeader() {
     <header className="border-b sticky top-0 bg-white z-40">
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-4">
-          <Link href="/" className="text-sm font-medium uppercase">
-            Shop Life
+          <Link href="/" className="text-base font-bold uppercase">
+            BrandKicks
           </Link>
 
           <div
@@ -76,9 +76,6 @@ export default function SiteHeader() {
               mobileMenuOpen ? "flex" : "hidden"
             } md:flex absolute md:relative top-16 left-0 right-0 bg-white md:top-auto z-50 flex-col md:flex-row items-center md:space-x-6 text-sm font-medium uppercase p-4 md:p-0 border-b md:border-0`}
           >
-            <Link href="/about" className="py-2 md:py-0 hover:text-gray-600">
-              About
-            </Link>
             <Link href="/new-products" className="py-2 md:py-0 hover:text-gray-600">
               New
             </Link>
@@ -90,6 +87,9 @@ export default function SiteHeader() {
             </Link>
             <Link href="/women" className="py-2 md:py-0 hover:text-gray-600">
               Women
+            </Link>
+            <Link href="/about" className="py-2 md:py-0 hover:text-gray-600">
+              About
             </Link>
           </div>
 

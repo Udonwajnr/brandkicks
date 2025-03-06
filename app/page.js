@@ -93,18 +93,22 @@ export default function SneakersShop() {
               />
             </div>
             <div className="flex flex-col justify-center">
-              <h2 className="text-3xl md:text-5xl font-bold uppercase leading-tight">
+              <h2 className="text-3xl md:text-7xl font-bold uppercase leading-tight">
                 Champions
                 <br />
                 Choose Us
               </h2>
-              <p className="mt-6 text-sm leading-relaxed">
+              <p className="mt-6  text-xl leading-relaxed">
                 We make sneakers for everyday walks, running, stylish looks. We work only with official suppliers, so
                 all sneakers are 100% original.
               </p>
-              <p className="mt-4 text-sm leading-relaxed">
+              <p className="mt-4 text-xl leading-relaxed">
                 Our online store features brands that customers love and are looking for. Unique models or collections
                 that are not available in other stores. Fast delivery to all regions.
+              </p>
+              <p className="mt-4 text-xl leading-relaxed">
+                Possibility of return or exchange if the product does not fit. Special offers for those who buy online or on a certain date.
+                 Consultants who help choose the perfect model by size or purpose.
               </p>
             </div>
           </div>

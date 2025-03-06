@@ -4,7 +4,7 @@ import { Heart } from "lucide-react"
 import { useAuth } from "@/app/context/context"
 
 export default function NewProductsPage() {
-  const {product} = useAuth()
+  const {product ,addToCart} = useAuth()
   return (
     <main className="bg-white">
       {/* New Products Section */}
@@ -19,20 +19,20 @@ export default function NewProductsPage() {
                 <button className="absolute top-2 right-2 z-10">
                   <Heart className="h-5 w-5" />
                 </button>
-                <Link href={`/product/${i + 1}`} className="block">
+                <Link href={`/catalog/${product.slug}}`} className="block">
                   <div className="relative h-[360px] mb-2 bg-gray-50 p-4">
                     <Image
                       src={`${product.images[0]}`}
                       alt={product.name}
                       width={180}
                       height={180}
-                      className=" w-full h-full"
+                      className=" w-full h-full object-cover"
                     />
                   </div>
-                  <div className="text-xs uppercase mb-1">{product.name}</div>
+                  <div className="text-sm font-bold uppercase mb-1">{product.name}</div>
                   <div className="flex items-center justify-between">
                     <div className="text-red-600 font-bold">$ {product.price}</div>
-                    <button className="bg-gray-100 rounded-full p-1 flex items-center justify-center w-6 h-6">
+                    {/* <button className="bg-gray-100 rounded-full p-1 flex items-center justify-center w-6 h-6">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M12 5V19M5 12H19"
@@ -42,7 +42,7 @@ export default function NewProductsPage() {
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                 </Link>
               </div>
@@ -54,16 +54,16 @@ export default function NewProductsPage() {
       {/* For Whom You Choose Section */}
       <section className="w-full py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8">FOR WHOM YOU CHOOSE</h2>
+          <h2 className="text-5xl md:text-3xl font-bold mb-8">FOR WHOM YOU CHOOSE</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative bg-gray-100">
               <Image
                 src="/man.jpg"
                 alt="Man in teal outfit with sneakers"
-                width={400}
-                height={400}
-                className=" h-full w-full"
+                width={1000}
+                height={1000}
+                className=" "
               />
               <div className="absolute bottom-4 left-4">
                 <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
@@ -83,11 +83,11 @@ export default function NewProductsPage() {
 
             <div className="relative  bg-gray-100">
               <Image
-                src="/test.jpg"
+                src="/g.jpg"
                 alt="Woman in red jacket with sneakers"
-                width={400}
-                height={400}
-                className=" h-full w-full"
+                width={1000}
+                height={1000}
+                className=""
               />
               <div className="absolute bottom-4 left-4">
                 <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">

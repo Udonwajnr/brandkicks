@@ -440,7 +440,7 @@ export default function Catalog() {
                               className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
                             />
                           </div>
-                          <div className="text-xs uppercase mb-1">{product.name}</div>
+                          <div className="text-sm font-bold uppercase mb-1">{product.name}</div>
                           <div className="flex items-center justify-between">
                             <div className="text-red-600 font-bold">${product.price}</div>
                             <button
@@ -453,7 +453,7 @@ export default function Catalog() {
                               <ShoppingCart className="h-4 w-4" />
                             </button>
                           </div>
-                          {product.brand && <div className="text-xs text-gray-500 mt-1">{product.brand}</div>}
+                          {product.brand && <div className="text-sm text-gray-500 mt-1">{product.brand}</div>}
                         </Link>
                       </div>
                     ))}
