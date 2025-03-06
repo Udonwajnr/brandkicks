@@ -1,101 +1,120 @@
-import Image from "next/image";
+"use client"
+import Image from "next/image"
+import Link from "next/link"
+import { Heart, ShoppingCart, Search } from "lucide-react"
+import SpinningShopButton from "@/components/SpinningButton";
+import BrandLogo from "@/components/BrandLogos";
+import SiteHeader from "@/components/SiteHeader";
+import NewProductsPage from "@/components/NewProductPage";
+import { useState } from "react";
 
-export default function Home() {
+export default function SneakersShop() {
+  const brands = [
+    { default: "/nike.webp", active: "/nike-active.webp" },
+    { default: "/aasics.png", active: "/aasics-active.png" },
+    { default: "/adidas.png", active: "/adidas-active.png" },
+    { default: "/puma.png", active: "/puma-active.png" },
+    { default: "/reebok.png", active: "/reebok-active.png" },
+    { default: "/columbia.png", active: "/columbia-active.png" },
+  ];
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [hoverIndex, setHoverIndex] = useState(null);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="w-full">
+        <div className="container mx-auto px-4">
+          {/* Navigation */}
+          <SiteHeader/>
+          
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          {/* Hero Content */}
+          <div className=" grid  gap-8 py-8 md:py-16 relative z-10 ">
+            <div className="flex flex-col  ">
+              <h1 className="text-4xl md:text-8xl font-bold uppercase leading-tight ">
+                New Arrival
+                <br />
+                Sneakers
+              </h1>
+              <p className="my-7 text-lg">Choose your best sneakers</p>
+
+      {/* Circular Button */}
+                  <SpinningShopButton/>                  
+            </div>
+
+            <div className="absolute right-0 -z-10">
+              <Image
+                src="/pngwing.png"
+                alt="Orange Nike Air Jordan Sneakers"
+                width={900}
+                height={900}
+                className="object-contain mx-auto"
+              />
+              <div className="absolute  md:left-40 md:top-[300px] bg-lime-400 py-1 px-3 -rotate-12 text-sm font-bold">
+                15% DISCOUNT
+                <br />
+                ONLY NOW!
+              </div>
+            </div>
+          </div>
+
+          {/* Brand Logos */}
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2 py-6 border-t border-b">
+      {brands.map((brand, index) => (
+        <div
+          key={index}
+          className={`flex items-center justify-center border cursor-pointer transition-all duration-300 ${
+            activeIndex === index ? "bg-gray-200" : ""
+          }`}
+          onMouseEnter={() => setHoverIndex(index)}
+          onMouseLeave={() => setHoverIndex(null)}
+          onClick={() => setActiveIndex(index)}
+        >
+          <img
+            src={hoverIndex === index || activeIndex === index ? brand.active : brand.default}
+            alt="Brand Logo"
+            className="w-[100%] transition-transform duration-300"
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      ))}
     </div>
-  );
+
+
+          {/* Champions Section */}
+          <div className="grid md:grid-cols-2 gap-8 py-12">
+            <div className="relative h-64 md:h-auto bg-gray-100">
+              <Image
+                src="/basketball.jpg"
+                alt="Basketball player"
+                width={400}
+                height={400}
+                className="object-cover h-full w-full"
+              />
+            </div>
+            <div className="flex flex-col justify-center">
+              <h2 className="text-3xl md:text-5xl font-bold uppercase leading-tight">
+                Champions
+                <br />
+                Choose Us
+              </h2>
+              <p className="mt-6 text-sm leading-relaxed">
+                We make sneakers for everyday walks, running, stylish looks. We work only with official suppliers, so
+                all sneakers are 100% original.
+              </p>
+              <p className="mt-4 text-sm leading-relaxed">
+                Our online store features brands that customers love and are looking for. Unique models or collections
+                that are not available in other stores. Fast delivery to all regions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <NewProductsPage/>
+     
+    </main>
+  )
 }
+
