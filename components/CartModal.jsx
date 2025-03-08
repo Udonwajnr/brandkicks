@@ -2,60 +2,57 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { X, Plus, Minus, Trash2, Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import axios from "axios"
 import { useAuth } from "@/app/context/context"
 
 export default function CartModal() {
-  const { cart, isCartOpen, closeCart, removeFromCart, updateQuantity, clearCart, getCartTotal,user } = useAuth()
+  const {
+    cart,
+    isCartOpen,
+    closeCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    getCartTotal,
+    user,
+    api,
+    isAuthenticated,
+  } = useAuth()
 
   const [checkoutStep, setCheckoutStep] = useState("cart") // cart, shipping, payment
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    address: "",
+    street: "",
     city: "",
-    zipCode: "",
+    state: "",
+    zip: "",
     country: "United States",
   })
 
+  // Load user info when cart opens
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem("token")
-    setIsAuthenticated(!!token)
-
-    // If authenticated, try to get user info
-    if (token) {
-      fetchUserInfo(token)
+    if (isCartOpen && isAuthenticated && user) {
+      setUserInfo({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        street: user.address || "",
+        city: user.city || "",
+        state: user.state || "",
+        zip: user.zipCode || "",
+        country: user.country || "United States",
+      })
     }
-  }, [isCartOpen])
-
-  const fetchUserInfo = async (token) => {
-    try {
-
-      if (user !== null) {
-        const user = response.data.user
-        setUserInfo({
-          firstName: user.firstName || "",
-          lastName: user.lastName || "",
-          email: user.email || "",
-          phone: user.phone || "",
-          address: user.address || "",
-          city: user.city || "",
-          zipCode: user.zipCode || "",
-          country: user.country || "United States",
-        })
-      }
-    } catch (error) {
-      console.error("Error fetching user info:", error)
-    }
-  }
+  }, [isCartOpen, isAuthenticated, user])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -66,7 +63,7 @@ export default function CartModal() {
   }
 
   const validateShippingInfo = () => {
-    const requiredFields = ["firstName", "lastName", "email", "phone", "address", "city", "zipCode"]
+    const requiredFields = ["firstName", "lastName", "email", "phone", "street", "city", "state", "zip"]
     const emptyFields = requiredFields.filter((field) => !userInfo[field])
 
     if (emptyFields.length > 0) {
@@ -74,8 +71,16 @@ export default function CartModal() {
       return false
     }
 
+    // Validate email format
     if (!userInfo.email.includes("@")) {
       setError("Please enter a valid email address")
+      return false
+    }
+
+    // Validate phone number (simple validation)
+    const phoneRegex = /^\d{10,15}$/
+    if (!phoneRegex.test(userInfo.phone.replace(/\D/g, ""))) {
+      setError("Please enter a valid phone number (10-15 digits)")
       return false
     }
 
@@ -123,40 +128,42 @@ export default function CartModal() {
     try {
       const token = localStorage.getItem("token")
 
+      // Format order data according to the schema
       const orderData = {
-        items: cart.map((item) => ({
-          productId: item.id,
-          quantity: item.quantity,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        email: userInfo.email,
+        phone: userInfo.phone,
+        orderItems: cart.map((item) => ({
+          product: item.id,
+          name: item.name,
           price: item.price,
-          size: item.size,
-          color: item.color,
+          quantity: item.quantity,
         })),
         shippingAddress: {
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          address: userInfo.address,
+          street: userInfo.street,
           city: userInfo.city,
-          zipCode: userInfo.zipCode,
+          state: userInfo.state,
+          zip: userInfo.zip,
           country: userInfo.country,
-          phone: userInfo.phone,
         },
-        totalAmount: getCartTotal(),
+        totalPrice: getCartTotal() + 10, // Adding $10 shipping
       }
 
-      const response = await axios.post("http://localhost:8000/api/order", orderData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.post("http://localhost:8000/api/order", orderData)
 
       // Order placed successfully
-      alert("Order placed successfully! Order ID: " + response.data.orderId)
+      alert(`Order placed successfully! Order #: ${response.data.orderNumber || response.data.orderId}`)
       clearCart()
       closeCart()
       setCheckoutStep("cart")
     } catch (error) {
       console.error("Error placing order:", error)
-      setError(error.response?.data?.message || "Failed to place order. Please try again.")
+      if (error.response?.status === 401) {
+        setError("Authentication error. Please sign in again.")
+      } else {
+        setError(error.response?.data?.message || "Failed to place order. Please try again.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -193,6 +200,15 @@ export default function CartModal() {
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 p-3 mx-4 mt-4 rounded-md text-sm">{error}</div>
+        )}
+
+        {!isAuthenticated && checkoutStep !== "cart" && (
+          <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 p-3 mx-4 mt-4 rounded-md text-sm flex justify-between items-center">
+            <span>Please sign in to checkout</span>
+            <Link href="/auth/login" className="underline font-medium" onClick={closeCart}>
+              Sign in
+            </Link>
+          </div>
         )}
 
         {checkoutStep === "cart" && (
@@ -326,7 +342,7 @@ export default function CartModal() {
             <form className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">First Name</label>
+                  <label className="block text-sm font-medium mb-1">First Name*</label>
                   <input
                     type="text"
                     name="firstName"
@@ -337,7 +353,7 @@ export default function CartModal() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Last Name</label>
+                  <label className="block text-sm font-medium mb-1">Last Name*</label>
                   <input
                     type="text"
                     name="lastName"
@@ -350,7 +366,7 @@ export default function CartModal() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="block text-sm font-medium mb-1">Email*</label>
                 <input
                   type="email"
                   name="email"
@@ -362,23 +378,24 @@ export default function CartModal() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Phone</label>
+                <label className="block text-sm font-medium mb-1">Phone*</label>
                 <input
                   type="tel"
                   name="phone"
                   value={userInfo.phone}
                   onChange={handleInputChange}
                   className="w-full p-2 border"
+                  placeholder="10-15 digits"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Address</label>
+                <label className="block text-sm font-medium mb-1">Street Address*</label>
                 <input
                   type="text"
-                  name="address"
-                  value={userInfo.address}
+                  name="street"
+                  value={userInfo.street}
                   onChange={handleInputChange}
                   className="w-full p-2 border"
                   required
@@ -387,7 +404,7 @@ export default function CartModal() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">City</label>
+                  <label className="block text-sm font-medium mb-1">City*</label>
                   <input
                     type="text"
                     name="city"
@@ -398,11 +415,11 @@ export default function CartModal() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Zip Code</label>
+                  <label className="block text-sm font-medium mb-1">State*</label>
                   <input
                     type="text"
-                    name="zipCode"
-                    value={userInfo.zipCode}
+                    name="state"
+                    value={userInfo.state}
                     onChange={handleInputChange}
                     className="w-full p-2 border"
                     required
@@ -410,21 +427,35 @@ export default function CartModal() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Country</label>
-                <select
-                  name="country"
-                  value={userInfo.country}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border"
-                >
-                  <option value="United States">United States</option>
-                  <option value="Canada">Canada</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Germany">Germany</option>
-                  <option value="France">France</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Zip Code*</label>
+                  <input
+                    type="text"
+                    name="zip"
+                    value={userInfo.zip}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Country*</label>
+                  <select
+                    name="country"
+                    value={userInfo.country}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border"
+                  >
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="France">Nigeria</option>
+                  </select>
+                </div>
               </div>
             </form>
 
@@ -438,6 +469,7 @@ export default function CartModal() {
               <button
                 onClick={handleCheckout}
                 className="flex-1 bg-black text-white py-2 text-center hover:bg-gray-800 transition-colors"
+                disabled={!isAuthenticated}
               >
                 Continue to Payment
               </button>
@@ -489,9 +521,9 @@ export default function CartModal() {
                 <p>
                   {userInfo.firstName} {userInfo.lastName}
                 </p>
-                <p>{userInfo.address}</p>
+                <p>{userInfo.street}</p>
                 <p>
-                  {userInfo.city}, {userInfo.zipCode}
+                  {userInfo.city}, {userInfo.state} {userInfo.zip}
                 </p>
                 <p>{userInfo.country}</p>
                 <p>{userInfo.phone}</p>
@@ -507,7 +539,7 @@ export default function CartModal() {
               </button>
               <button
                 onClick={placeOrder}
-                disabled={isLoading}
+                disabled={isLoading || !isAuthenticated}
                 className="flex-1 bg-black text-white py-2 text-center hover:bg-gray-800 transition-colors flex items-center justify-center"
               >
                 {isLoading ? (

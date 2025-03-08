@@ -76,17 +76,14 @@ export default function SiteHeader() {
               mobileMenuOpen ? "flex" : "hidden"
             } md:flex absolute md:relative top-16 left-0 right-0 bg-white md:top-auto z-50 flex-col md:flex-row items-center md:space-x-6 text-sm font-medium uppercase p-4 md:p-0 border-b md:border-0`}
           >
-            <Link href="/new-products" className="py-2 md:py-0 hover:text-gray-600">
-              New
-            </Link>
             <Link href="/catalog" className="py-2 md:py-0 hover:text-gray-600">
               Catalog
             </Link>
-            <Link href="/men" className="py-2 md:py-0 hover:text-gray-600">
-              Men
+            <Link href="/catalog?gender=male" className="py-2 md:py-0 hover:text-gray-600">
+              Male
             </Link>
-            <Link href="/women" className="py-2 md:py-0 hover:text-gray-600">
-              Women
+            <Link href="/catalog?gender=female" className="py-2 md:py-0 hover:text-gray-600">
+              Female
             </Link>
             <Link href="/about" className="py-2 md:py-0 hover:text-gray-600">
               About
@@ -98,7 +95,7 @@ export default function SiteHeader() {
               <Menu className="h-5 w-5" />
             </button>
 
-            <div ref={searchRef} className="relative">
+            {/* <div ref={searchRef} className="relative">
               {searchOpen ? (
                 <form onSubmit={handleSearch} className="absolute right-0 top-0 flex items-center">
                   <input
@@ -118,7 +115,7 @@ export default function SiteHeader() {
                   <Search className="h-5 w-5" />
                 </button>
               )}
-            </div>
+            </div> */}
 
             <button aria-label="Favorites">
               <Heart className="h-5 w-5" />

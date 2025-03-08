@@ -5,7 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import axios from "axios"
 import { Heart, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
-import SiteHeader from "@/components/SiteHeader"
 import { Alert } from "@/components/ui/alert"
 import { motion } from "framer-motion"
 import { useAuth } from "@/app/context/context"
@@ -109,7 +108,6 @@ export default function ProductDetailPage({ params }) {
 
   return (
     <main className="min-h-screen bg-white">
-      <SiteHeader />
       <Alert isOpen={alert.isOpen} type={alert.type} title={alert.title} message={alert.message} onClose={closeAlert} />
 
       <div className="container mx-auto px-4 py-8">

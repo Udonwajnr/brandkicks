@@ -1,8 +1,8 @@
 import { Overpass_Mono } from 'next/font/google'
-
+import SiteHeader from '@/components/SiteHeader';
 import "./globals.css";
 import { AuthProvider } from "./context/context";
-
+import Footer from '@/components/Footer';
 
 const overpass_mono = Overpass_Mono({
   weight: '400',
@@ -21,8 +21,10 @@ export default function RootLayout({ children }) {
         className={overpass_mono.className}
       >
         <AuthProvider>
+          <SiteHeader/>
           {children}
         </AuthProvider>
+        <Footer/>
       </body>
     </html>
   );

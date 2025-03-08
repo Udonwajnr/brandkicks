@@ -4,14 +4,18 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import axios from "axios"
-import { Heart, ShoppingCart, Search, Filter, X, Loader2 } from "lucide-react"
-import SiteHeader from "@/components/SiteHeader"
+import { Heart, ShoppingCart, Search, Filter, X, Loader2 } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Alert } from "@/components/ui/alert"
+import {
+  Alert,
+  AlertTitle,
+  AlertDescription
+} from "@/components/ui/alert"
 import { useAuth } from "../context/context"
+import { useSearchParams } from "next/navigation"
 // Price range options
 const priceRanges = [
   { label: "$100 - $250", value: "100-250" },
@@ -33,6 +37,8 @@ const colorOptions = [
   { value: "cyan", class: "bg-cyan-400" },
 ]
 
+const GENDERS = ["Male", "Female", "Unisex"]
+
 export default function Catalog() {
   // State for products and loading
   const [products, setProducts] = useState([])
@@ -40,6 +46,7 @@ export default function Catalog() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const {addToCart } = useAuth()
+  const searchParams = useSearchParams()
 
   // State for brands (dynamically loaded from products)
   const [availableBrands, setAvailableBrands] = useState([])
@@ -68,6 +75,18 @@ export default function Catalog() {
   useEffect(() => {
     fetchProducts()
   }, [])
+
+  useEffect(() => {
+    const gender = searchParams.get("gender")
+
+    if (gender) {
+      const formattedGender = gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase()
+
+      if (GENDERS.includes(formattedGender)) {
+        setFilters((prev) => ({ ...prev, gender: formattedGender }))
+      }
+    }
+  }, [searchParams])
 
   // Apply filters when filter state or products change
   useEffect(() => {
@@ -119,9 +138,9 @@ export default function Catalog() {
       setAvailableBrands(brandArray)
 
       // Show success alert
-      if (response.data.length > 0) {
-        showAlert("success", "Products Loaded", `Successfully loaded ${response.data.length} products.`)
-      }
+      // if (response.data.length > 0) {
+      //   showAlert("success", "Products Loaded", `Successfully loaded ${response.data.length} products.`)
+      // }
     } catch (err) {
       console.error("Error fetching products:", err)
       setError("Failed to load products. Please try again later.")
@@ -231,11 +250,6 @@ export default function Catalog() {
   const toggleMobileFilters = () => {
     setShowMobileFilters((prev) => !prev)
   }
-//   const addToCart = (product) => {
-//     // This would normally add the product to the cart
-//     // For now, just show an alert
-//     showAlert("success", "Added to Cart", `${product.name} has been added to your cart.`)
-//   }
 
   const addToWishlist = (product) => {
     // This would normally add the product to the wishlist
@@ -245,8 +259,6 @@ export default function Catalog() {
 
   return (
     <>
-      <SiteHeader />
-
       {/* Custom Alert */}
       <Alert isOpen={alert.isOpen} type={alert.type} title={alert.title} message={alert.message} onClose={closeAlert} />
 
@@ -269,7 +281,7 @@ export default function Catalog() {
 
           {/* Category Tabs */}
           <div className="grid grid-cols-3 gap-4 mb-8">
-            {["Male", "Female", "Unisex"].map((category) => (
+            {GENDERS.map((category) => (
               <button
                 key={category}
                 className={`py-3 text-center font-medium transition-colors ${
@@ -296,8 +308,11 @@ export default function Catalog() {
 
           <div className="grid md:grid-cols-4 gap-6">
             {/* Filters Sidebar - Desktop & Mobile */}
-            <div className={`${showMobileFilters ? "block" : "hidden"} md:block`}>
-              <div className="border p-4 mb-4 bg-white">
+            <div className={`
+              ${showMobileFilters ? "block" : "hidden"} md:block 
+              md:sticky md:top-20 md:self-start md:max-h-[calc(100vh-5rem)] md:overflow-y-auto
+            `}>
+              <div className="border p-4 mb-4 bg-white sticky top-0 z-10">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold mb-2">FILTERS</h3>
                   <Button variant="ghost" size="sm" onClick={resetFilters} className="text-xs">
@@ -467,4 +482,3 @@ export default function Catalog() {
     </>
   )
 }
-
