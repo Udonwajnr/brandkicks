@@ -4,7 +4,6 @@ import SpinningShopButton from "@/components/SpinningShopButton"
 import NewProductsPage from "@/components/NewProductPage"
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion"
-import Footer from "@/components/footer"
 
 export default function SneakersShop() {
   const brands = [
