@@ -34,7 +34,6 @@ export function AuthProvider({ children }) {
     async (config) => {
       if (typeof window !== "undefined") {
         const accessToken = localStorage.getItem("token"); // Get the latest token
-        console.log("🔹 Token from localStorage:", accessToken);
 
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
@@ -65,7 +64,6 @@ export function AuthProvider({ children }) {
       }
       try {
         const response = await api.get("/api/user/profile");
-        console.log(response)
         setUser(response.data);
       } catch (error) {
         console.error("Auth check error:", error);

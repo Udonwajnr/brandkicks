@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert"
 import { useAuth } from "../context/context"
 import { useSearchParams } from "next/navigation"
+
 // Price range options
 const priceRanges = [
   { label: "$100 - $250", value: "100-250" },
