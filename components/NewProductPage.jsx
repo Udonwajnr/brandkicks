@@ -58,14 +58,14 @@ export default function NewProductsPage() {
                   {/* <Heart className="h-5 w-5" /> */}
                 </button>
                 <Link href={`/catalog/${product.slug}`} className="block">
-                  <div className="relative h-[360px] mb-2 bg-gray-50 p-4 overflow-hidden">
+                  <div className="relative  h-auto mb-2 bg-gray-50 p-4 overflow-hidden">
                     <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
                       <Image
                         src={`${product.images[0]}`}
                         alt={product.name}
                         width={180}
                         height={180}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                       />
                     </motion.div>
                   </div>
