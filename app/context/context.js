@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 // Base API URL
-const BASE_URL = "http://localhost:8000"; // Replace with actual API URL
+const BASE_URL = "https://strterexpressproject.onrender.com"; // Replace with actual API URL
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Ensure this is in .env.local
 
 // Create Context
@@ -92,18 +92,21 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+
   useEffect(() => {
     if(typeof window !=="undefined" && cart.length > 0){
         localStorage.setItem("cart", JSON.stringify(cart))
     }
   }, [cart])
 
+  
+
   // Login Function
   const login = async (email, password) => {
     setIsLoading(true)
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
+      const response = await axios.post("https://strterexpressproject.onrender.com/api/auth/login", {
         email,
         password,
       })
@@ -124,7 +127,7 @@ export function AuthProvider({ children }) {
     setIsLoading(true)
 
     try {
-      await axios.post("http://localhost:8000/api/auth/register", {
+      await axios.post("https://strterexpressproject.onrender.com/api/auth/register", {
         name,
         email,
         password,
@@ -213,6 +216,7 @@ export function AuthProvider({ children }) {
   }
 
   const clearCart = () => {
+    localStorage.removeItem("cart")
     setCart([])
   }
 

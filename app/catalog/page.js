@@ -46,7 +46,7 @@ export default function Catalog() {
   const [filteredProducts, setFilteredProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
-  const {addToCart } = useAuth()
+  const {addToCart,openCart } = useAuth()
   const searchParams = useSearchParams()
 
   // State for brands (dynamically loaded from products)
@@ -117,7 +117,7 @@ export default function Catalog() {
     setError(null)
 
     try {
-      const response = await axios.get("http://localhost:8000/api/products")
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/products`)
       setProducts(response.data)
 
       // Extract unique brands and count products for each
@@ -161,6 +161,8 @@ export default function Catalog() {
       result = result.filter((product) => product.gender === filters.gender || product.gender === "Unisex")
     }
 
+    console.log(result)
+
     // Filter by price ranges
     if (filters.priceRanges.length > 0) {
       result = result.filter((product) => {
@@ -197,6 +199,7 @@ export default function Catalog() {
     setFilteredProducts(result)
   }
 
+  console.log(products)
   const handleGenderChange = (gender) => {
     setFilters((prev) => ({ ...prev, gender }))
   }
@@ -246,6 +249,21 @@ export default function Catalog() {
 
     // Show alert when filters are reset
     showAlert("success", "Filters Reset", "All filters have been cleared.")
+  }
+
+  const handleAddToCart = (product,quantity,selectedSize,selectedColor) => {
+    if (!selectedSize) {
+      showAlert("error", "Selection Required", "Please select a size before adding to cart")
+      return
+    }
+
+    addToCart(product, quantity, selectedSize, selectedColor)
+    showAlert("success", "Added to Cart", `${product.name} has been added to your cart`)
+
+    // Open cart after a short delay
+    setTimeout(() => {
+      openCart()
+    }, 1000)
   }
 
   const toggleMobileFilters = () => {
@@ -444,7 +462,7 @@ export default function Catalog() {
                           <div className="absolute top-2 left-2 z-10 bg-lime-400 px-2 py-1 text-xs font-bold">NEW</div>
                         )}
                         <button className="absolute top-4 right-4 z-10" onClick={() => addToWishlist(product)}>
-                          <Heart className="h-5 w-5" />
+                          {/* <Heart className="h-5 w-5" /> */}
                         </button>
                         <Link href={`/catalog/${product.slug}`} className="block">
                           <div className="relative h-48 mb-4 overflow-hidden">
@@ -463,7 +481,7 @@ export default function Catalog() {
                               className="bg-gray-100 rounded-full p-1 hover:bg-gray-200 transition-colors"
                               onClick={(e) => {
                                 e.preventDefault()
-                                addToCart(product)
+                                handleAddToCart(product,1,product.size[0],product.color[0])
                               }}
                             >
                               <ShoppingCart className="h-4 w-4" />

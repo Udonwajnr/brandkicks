@@ -150,7 +150,7 @@ export default function CartModal() {
         totalPrice: getCartTotal() + 10, // Adding $10 shipping
       }
 
-      const response = await api.post("http://localhost:8000/api/order", orderData)
+      const response = await api.post("https://strterexpressproject.onrender.com/api/order", orderData)
 
       // Order placed successfully
       alert(`Order placed successfully! Order #: ${response.data.orderNumber || response.data.orderId}`)

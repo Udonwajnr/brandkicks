@@ -92,7 +92,7 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      const response = await axios.post("http://localhost:8000/api/user/register", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/user/register`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,

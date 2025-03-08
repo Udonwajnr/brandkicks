@@ -3,9 +3,10 @@
 import { useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Heart } from "lucide-react"
+
 import { useAuth } from "@/app/context/context"
 import { motion, useInView } from "framer-motion"
+import SpinningShopButton from "./SpinningShopButton"
 
 export default function NewProductsPage() {
   const { product, addToCart } = useAuth()
@@ -54,7 +55,7 @@ export default function NewProductsPage() {
                 whileHover={{ y: -5 }}
               >
                 <button className="absolute top-2 right-2 z-10">
-                  <Heart className="h-5 w-5" />
+                  {/* <Heart className="h-5 w-5" /> */}
                 </button>
                 <Link href={`/catalog/${product.slug}`} className="block">
                   <div className="relative h-[360px] mb-2 bg-gray-50 p-4 overflow-hidden">
@@ -120,7 +121,8 @@ export default function NewProductsPage() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 whileHover={{ scale: 1.1 }}
               >
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
+                <SpinningShopButton text={"For Men  • For Men • or Men"} href = "/catalog?gender=male"/>
+                {/* <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M13.5 4.5L21 12L13.5 19.5"
@@ -131,7 +133,7 @@ export default function NewProductsPage() {
                     />
                     <path d="M21 12H3" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </div>
+                </div> */}
               </motion.div>
             </motion.div>
 
@@ -156,7 +158,9 @@ export default function NewProductsPage() {
                 transition={{ duration: 0.5, delay: 0.5 }}
                 whileHover={{ scale: 1.1 }}
               >
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
+
+                <SpinningShopButton text={"For women•For Women•For Wo"} href = "/catalog?gender=female"/>
+                {/* <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M13.5 4.5L21 12L13.5 19.5"
@@ -167,7 +171,7 @@ export default function NewProductsPage() {
                     />
                     <path d="M21 12H3" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </div>
+                </div> */}
               </motion.div>
             </motion.div>
           </motion.div>

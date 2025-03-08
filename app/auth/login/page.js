@@ -68,6 +68,7 @@ export default function LoginPage() {
     setAlert((prev) => ({ ...prev, isOpen: false }))
   }
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -76,7 +77,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const response = await axios.post("http://localhost:8000/api/user/login", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API}/api/user/login`, {
         email: formData.email,
         password: formData.password,
       })

@@ -232,7 +232,7 @@ export default function ContactPage() {
               </div>
 
               {/* Map */}
-              <div className="mt-8">
+              {/* <div className="mt-8">
                 <h3 className="text-xl font-semibold mb-4">Find Us</h3>
                 <div className="h-64 bg-gray-200 rounded-lg overflow-hidden relative">
                   <Image
@@ -247,7 +247,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </div>

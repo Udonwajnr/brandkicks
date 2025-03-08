@@ -88,6 +88,9 @@ export default function SiteHeader() {
             <Link href="/about" className="py-2 md:py-0 hover:text-gray-600">
               About
             </Link>
+            <Link href="/contact-us" className="py-2 md:py-0 hover:text-gray-600">
+              Contact
+            </Link>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -118,7 +121,7 @@ export default function SiteHeader() {
             </div> */}
 
             <button aria-label="Favorites">
-              <Heart className="h-5 w-5" />
+              {/* <Heart className="h-5 w-5" /> */}
             </button>
 
             <button aria-label="Cart" onClick={toggleCart} className="relative">

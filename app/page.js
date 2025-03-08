@@ -9,7 +9,7 @@ import Footer from "@/components/footer"
 export default function SneakersShop() {
   const brands = [
     {
-      logo: "/Nike-Logo.jpg",
+      logo: "/nike.png",
       shoe: "/nike-shoe.png",
       name: "Nike",
     },
@@ -40,7 +40,7 @@ export default function SneakersShop() {
     },
   ]
 
-  const [activeIndex, setActiveIndex] = useState(null)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [hoverIndex, setHoverIndex] = useState(null)
   const [currentShoe, setCurrentShoe] = useState(brands[0].shoe) // Default to first brand's shoe
 
@@ -93,15 +93,15 @@ export default function SneakersShop() {
               animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h1 className="text-4xl md:text-8xl font-bold uppercase leading-tight">
+              <h1 className="text-4xl md:text-8xl font-bold uppercase leading-tight text-center md:text-left">
                 New Arrival
                 <br />
                 Sneakers
               </h1>
-              <p className="my-7 text-lg">Choose your best sneakers</p>
+              <p className="my-7 text-lg w-40">Choose your best sneakers</p>
 
               {/* Circular Button */}
-              <SpinningShopButton spinning={true}/>
+              <SpinningShopButton spinning={true} href={"/catalog"}/>
             </motion.div>
 
             {/* Shoe image that changes based on active brand */}
@@ -120,12 +120,12 @@ export default function SneakersShop() {
                     alt={
                       activeIndex !== null ? `${brands[activeIndex].name} Sneakers` : "Orange Nike Air Jordan Sneakers"
                     }
-                    width={900}
-                    height={900}
+                    width={1000}
+                    height={1000}
                     className="object-contain mx-auto"
                   />
                   <motion.div 
-                    className="absolute md:left-40 md:top-[300px] bg-lime-400 py-1 px-3 -rotate-12 text-sm font-bold"
+                    className="absolute md:left-40 md:top-[300px] top-[100px] bg-lime-400 py-1 px-3 -rotate-12 text-sm font-bold"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.8 }}
@@ -225,16 +225,18 @@ export default function SneakersShop() {
             </motion.div>
             <motion.div 
               ref={championsTextRef}
-              className="flex flex-col justify-center"
+              className="flex flex-col  justify-center"
               initial={{ opacity: 0, x: 50 }}
               animate={championsTextInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-7xl font-bold uppercase leading-tight">
-                Champions
-                <br />
-                Choose Us
-              </h2>
+              <div className="">
+                <h2 className="text-3xl md:text-7xl font-bold uppercase leading-tight text-center ">
+                  Champions
+                  Choose Us
+                </h2>
+
+              </div>
               <motion.p 
                 className="mt-6 text-xl leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}

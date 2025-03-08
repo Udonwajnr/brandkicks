@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function SpinningShopButton({ spinning, size = "md", href = "/shop" }) {
+export default function SpinningShopButton({ spinning, size = "md", href,text }) {
   const circleRef = useRef(null);
   const textPathRef = useRef(null);
 
@@ -38,7 +38,7 @@ export default function SpinningShopButton({ spinning, size = "md", href = "/sho
   }, [radius]);
 
   return (
-    <motion.div className="mt-8 relative inline-block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <motion.div className=" mt-32 md:mt-0 relative flex justify-center items-center lg:inline-block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
       <Link href={href}>
         <div className={`${button} rounded-full border-2 border-black bg-white hover:bg-lime-400 transition-colors duration-300 flex items-center justify-center relative group`}>
           <svg className={`absolute inset-0 w-full h-full ${spinning ? "animate-spin-slow" : ""}`} viewBox="0 0 100 100">
@@ -50,7 +50,10 @@ export default function SpinningShopButton({ spinning, size = "md", href = "/sho
               />
             </defs>
             <text className={`${fontSize} uppercase font-bold tracking-widest fill-black group-hover:fill-black`}>
-              <textPath xlinkHref="#circle" ref={textPathRef}>Shop Now • Shop Now • Shop Now • Shop Now •</textPath>
+              <textPath xlinkHref="#circle" ref={textPathRef}>
+                {/* Shop Now • Shop Now • Shop Now • Shop Now • */}
+                {text?text : "Shop Now • Shop Now • Shop Now • Shop Now •"}
+                </textPath>
             </text>
           </svg>
 

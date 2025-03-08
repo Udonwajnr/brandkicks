@@ -9,6 +9,8 @@ import { Alert } from "@/components/ui/alert"
 import { motion } from "framer-motion"
 import { useAuth } from "@/app/context/context"
 
+import SpinningShopButton from "@/components/addToCartDetilButton"
+
 export default function ProductDetailPage({ params }) {
   const { slug } = params
   const [product, setProduct] = useState(null)
@@ -34,7 +36,7 @@ export default function ProductDetailPage({ params }) {
       setError(null)
 
       try {
-        const response = await axios.get(`http://localhost:8000/api/products/${slug}`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/api/products/${slug}`)
         setProduct(response.data)
 
         if (response.data.color && response.data.color.length > 0) {
@@ -47,7 +49,7 @@ export default function ProductDetailPage({ params }) {
 
         if (response.data.brand) {
           const relatedResponse = await axios.get(
-            `http://localhost:8000/api/products?brand=${response.data.brand}&limit=4`,
+            `${process.env.NEXT_PUBLIC_API}/api/products?brand=${response.data.brand}&limit=4`,
           )
           const filteredRelated = relatedResponse.data.filter((item) => item.slug !== slug)
           setRelatedProducts(filteredRelated.slice(0, 4))
@@ -120,7 +122,7 @@ export default function ProductDetailPage({ params }) {
             transition={{ duration: 0.5 }}
           >
             <button className="absolute top-2 right-2 z-10" onClick={addToWishlist}>
-              <Heart className="w-5 h-5" />
+              {/* <Heart className="w-5 h-5" /> */}
             </button>
 
             <div className="relative aspect-square bg-white mb-4 border">
@@ -230,21 +232,22 @@ export default function ProductDetailPage({ params }) {
               ) : (
                 <div className="text-sm text-gray-500">No sizes available</div>
               )}
-              <button className="text-sm underline mt-2">SIZE CHART</button>
+              {/* <button className="text-sm underline mt-2">SIZE CHART</button> */}
             </div>
 
             {product.description && <div className="mb-6 text-sm text-gray-600">{product.description}</div>}
 
-            <div className="flex items-center justify-between mb-8">
-              <div className="text-xl font-medium">$ {product.price}</div>
-              <motion.button
+            <div className="flex items-center justify-between mb-2 md:mb-8">
+              <div className="text-xl font-medium">${product.price}</div>
+              <SpinningShopButton text={" Add to Cart • Add to Cart • "} handleAddToCart={handleAddToCart} size="md" spinning={true}/>
+              {/* <motion.button
                 whileHover={{ rotate: 90 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center"
                 onClick={handleAddToCart}
               >
                 <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              </motion.button> */}
             </div>
           </motion.div>
         </div>
@@ -272,7 +275,7 @@ export default function ProductDetailPage({ params }) {
                     showAlert("success", "Added to Wishlist", `${product.name} has been added to your wishlist`)
                   }
                 >
-                  <Heart className="w-4 h-4" />
+                  {/* <Heart className="w-4 h-4" /> */}
                 </button>
                 <Link href={`/product/${product.slug}`}>
                   <div className="aspect-square bg-white mb-4 border">
