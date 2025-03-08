@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 // Base API URL
 const BASE_URL = "https://strterexpressproject.onrender.com"; // Replace with actual API URL
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY; // Ensure this is in .env.local
+const API_KEY = process.env.NEXT_PUBLIC_API_MIDDLE_WARE; // Ensure this is in .env.local
 
 // Create Context
 const AuthContext = createContext(undefined);
